@@ -1,10 +1,6 @@
 package com.example.lab7moviles.ui.mealDetail.view
 
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,39 +25,20 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.lab7moviles.networking.response.MealDetailList
-import com.example.lab7moviles.ui.categories.view.MealCategoriesMainApp
 import com.example.lab7moviles.ui.mealDetail.viewModel.MealDetailsViewModel
 
-
-
-
-
-
-
-
-class MealDetail: ComponentActivity(){
-    override fun onCreate(savedInstanceState: Bundle?){
-        super.onCreate(savedInstanceState)
-        val mealId= intent.getStringExtra("mealId")
-        setContent{
-            MealDetailMainApp(mealId = "mealId")
-        }
-    }
-}
-
 @Composable
-fun MealDetailMainApp(mealId:String?) {
+fun MealDetailMain(mealId:String?) {
     val viewModel: MealDetailsViewModel = viewModel()
     val mealDetails: MutableState<List<MealDetailList>> = remember { mutableStateOf(emptyList()) }
-    val backgroundcolor= Color(android.graphics.Color.parseColor("#F7F0C6"))
 
     if (mealId != null) {
         viewModel.getMealById(mealId) { response ->
@@ -72,13 +47,12 @@ fun MealDetailMainApp(mealId:String?) {
         }
     }
 
-    val gradientBrush = Brush.horizontalGradient(
+    val brush = Brush.horizontalGradient(
         colors = listOf(Color(0xFF5733), Color(0xFF5733))
     )
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = backgroundcolor
     ) {
         LazyColumn(
             modifier = Modifier
@@ -87,7 +61,7 @@ fun MealDetailMainApp(mealId:String?) {
         ) {
             mealDetails?.let { details ->
                 itemsIndexed(mealDetails.value) {index,detail ->
-                    MealDetailItem(detail = detail, gradientBrush= gradientBrush)
+                    MealDetailItem(detail = detail, Brush= brush)
                 }
             }
         }
@@ -95,7 +69,7 @@ fun MealDetailMainApp(mealId:String?) {
 }
 
 @Composable
-fun MealDetailItem(detail: MealDetailList, gradientBrush: Brush) {
+fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
 
     Column(
         modifier = Modifier
@@ -109,7 +83,7 @@ fun MealDetailItem(detail: MealDetailList, gradientBrush: Brush) {
                 .fillMaxWidth()
                 .height(200.dp)
                 .shadow(8.dp, shape = RoundedCornerShape(8.dp))
-                .background(brush = gradientBrush),
+                .background(brush = Brush),
         ) {
             Image(
                 painter = painter,
@@ -136,26 +110,29 @@ fun MealDetailItem(detail: MealDetailList, gradientBrush: Brush) {
 
         Text(
             text = "Category: ${detail.category}",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            color= androidx.compose.ui.graphics.Color.Gray,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 24.sp,
+            color = androidx.compose.ui.graphics.Color.Black,
+            fontFamily = FontFamily.Monospace,
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
-
         )
+
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Area: ${detail.area}",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color= androidx.compose.ui.graphics.Color.Gray,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 20.sp,
+            color = androidx.compose.ui.graphics.Color.Black,
+            fontFamily = FontFamily.Monospace,
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
         )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -163,14 +140,17 @@ fun MealDetailItem(detail: MealDetailList, gradientBrush: Brush) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Color(0xFFEFEFEF))
+                .background(
+                    color = Color(0xFFEFEFEF),
+                    shape = RoundedCornerShape(16.dp),
+                )
                 .padding(16.dp)
-        ) {
+        ){
             Column {
                 Text(
-                    text = "Ingredients:",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    text = "Ingredientes:",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
                 )
 
                 val ingredientsList = mutableListOf<String>()
@@ -202,11 +182,11 @@ fun MealDetailItem(detail: MealDetailList, gradientBrush: Brush) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Instructions:",
+            text = "Instrucciones:",
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             modifier = Modifier
-                .padding(bottom = 8.dp)
+                .padding(bottom = 10.dp)
                 .align(Alignment.CenterHorizontally)
         )
 

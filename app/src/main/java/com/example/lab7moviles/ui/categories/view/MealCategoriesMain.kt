@@ -47,7 +47,7 @@ import com.example.lab7moviles.ui.categories.viewModel.MealCategoriesViewModel
 
 
 @Composable
-fun MealCategoriesMainApp() {
+fun MealCategoriesMainApp(navController: NavController) {
     val viewModel: MealCategoriesViewModel = viewModel()
     val categorizedMeals: MutableState<List<MealResponse>> =
         remember { mutableStateOf(emptyList()) }

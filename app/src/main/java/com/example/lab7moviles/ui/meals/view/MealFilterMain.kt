@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.lab7moviles.navigation.NavigationState
 import com.example.lab7moviles.networking.response.Meals
-import com.example.lab7moviles.ui.mealDetail.view.MealDetail
 import com.example.lab7moviles.ui.meals.viewModel.MealFilterViewModel
 
 
@@ -42,11 +42,11 @@ import com.example.lab7moviles.ui.meals.viewModel.MealFilterViewModel
 
 @Composable
 fun MealFilterMainApp(category: String?, navController: NavController) {
-    val viewModel: MealFilterViewModel = viewModel() //ViewModel
-    val filteredMeals: MutableState<List<Meals>> = remember { mutableStateOf(emptyList()) } //Lista de estado mutable de las comidas que pertenencen a la categoría seleccionada
-    val context = LocalContext.current // context local
+    val viewModel: MealFilterViewModel = viewModel()
+    val filteredMeals: MutableState<List<Meals>> = remember { mutableStateOf(emptyList()) }
+    val context = LocalContext.current
 
-    if (category != null) { //Se llama a la función para obtener las comidas de cada categoría desde la API
+    if (category != null) {
         viewModel.getMealsByCategory(category) { response ->
             val mealsFromTheApi = response?.meals.orEmpty()
             filteredMeals.value = mealsFromTheApi
@@ -61,11 +61,11 @@ fun MealFilterMainApp(category: String?, navController: NavController) {
                 text = "Available Meals",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = Color.DarkGray,
+                color = Color.Black,
                 modifier = Modifier.padding(16.dp)
             )
 
-            LazyColumn {//Despliega las comidas de la categoría en un LazyColumn
+            LazyColumn {
                 items(filteredMeals.value) { meal ->
                     MealItem(meal= meal, context=context)
                 }
@@ -77,15 +77,13 @@ fun MealFilterMainApp(category: String?, navController: NavController) {
 
 @Composable
 fun MealItem(meal: Meals, context: Context) {
-    val backgroundcolor= Color(android.graphics.Color.parseColor("#DEB866"))
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(color= backgroundcolor)
             .clickable {
-                val intent = Intent(context, MealDetail::class.java)
-                intent.putExtra("mealId", meal.idMeal) // Agrega el valor de la categoría como un extra
+                val intent = Intent(context, NavigationState.MealDetailsMain::class.java)
+                intent.putExtra("mealId", meal.idMeal)
                 context.startActivity(intent)
             }
     ) {
@@ -93,7 +91,7 @@ fun MealItem(meal: Meals, context: Context) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
-        ) {//Imagen de cada comida
+        ) {
             val painter = rememberAsyncImagePainter(model = meal.imageUrlmeal)
             Image(
                 painter = painter,
@@ -104,11 +102,11 @@ fun MealItem(meal: Meals, context: Context) {
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text( //Nombre de la comida
+            Text(
                 text = meal.stringMeal,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.DarkGray,
+                color = Color.Black,
                 modifier = Modifier
                     .padding(bottom = 8.dp)
                     .align(Alignment.CenterHorizontally)

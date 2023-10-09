@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.lab7moviles.ui.categories.view.MealCategoriesMainApp
-import com.example.lab7moviles.ui.mealDetail.view.MealDetailMainApp
+import com.example.lab7moviles.ui.mealDetail.view.MealDetailMain
 import com.example.lab7moviles.ui.meals.view.MealFilterMainApp
 
 @Composable
@@ -16,7 +16,7 @@ fun Navigation(modifier: Modifier = Modifier) {
         startDestination = NavigationState.MealCategoriesMain.route,
         modifier = modifier) {
         composable(route = NavigationState.MealCategoriesMain.route) {
-            MealCategoriesMainApp()
+            MealCategoriesMainApp(navController)
         }
         composable(route = NavigationState.MealFilterMain.route) { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")
@@ -28,7 +28,7 @@ fun Navigation(modifier: Modifier = Modifier) {
         composable(route = "${NavigationState.MealDetailsMain.route}/{mealId}") { backStackEntry ->
             val mealId = backStackEntry.arguments?.getString("mealId")
             if (mealId != null) {
-                MealDetailMainApp(mealId)
+                MealDetailMain(mealId)
             }
         }
     }
