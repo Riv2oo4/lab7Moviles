@@ -18,15 +18,15 @@ class MealsWeb {
         api = retrofit.create(MealsApi::class.java)
     }
 
-    fun getMealCategories(): Call<MealResponseCategories> {     // Función para obtener categorías de comidas
+    fun getMealCategories(): Call<MealResponseCategories> {
         return api.getMealCategories()
     }
 
-    fun getMealsByCategory(category: String): Call<MealResponseFilter> {  // Función para obtener comidas por categoría
+    fun getMealsByCategory(category: String): Call<MealResponseFilter> {
         return api.getMealsByCategory(category)
     }
 
-    fun getMealById(mealId: String): Call<MealResponseLookup> { // Función para obtener detalles de una comida por su ID
+    fun getMealById(mealId: String): Call<MealResponseLookup> {
         return api.getMealById(mealId)
     }
 }

@@ -6,10 +6,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MealFilterRepository(private val webService: MealsWeb = MealsWeb()) {
-    fun getMealsByCategory(category: String, successCallback: (response: MealResponseFilter?) -> Unit){
-        return webService.getMealsByCategory(category).enqueue(object:
-            Callback<MealResponseFilter> {
+class MealFilterRepository(private val webService: MealsWeb= MealsWeb()) {
+    fun getMealByCategory(category: String, successCallback: (response: MealResponseFilter?) -> Unit){
+        return webService.getMealsByCategory(category).enqueue(object: Callback<MealResponseFilter>{
             override fun onResponse(
                 call: Call<MealResponseFilter>,
                 response: Response<MealResponseFilter>
