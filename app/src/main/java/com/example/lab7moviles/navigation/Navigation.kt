@@ -19,13 +19,13 @@ fun Navigation(modifier: Modifier = Modifier) {
             MealCategoriesMainApp(navController)
         }
         composable(route = NavigationState.MealFilterMain.route) { backStackEntry ->
-            val categoryId = backStackEntry.arguments?.getString("categoryId")
-            if (categoryId != null) {
+            val category = backStackEntry.arguments?.getString("categoryId")
+            if (category != null) {
 
-                MealFilterMainApp(categoryId, navController)
+                MealFilterMainApp(category,navController)
             }
         }
-        composable(route = "${NavigationState.MealDetailsMain.route}/{mealId}") { backStackEntry ->
+        composable(route = NavigationState.MealDetailsMain.route) { backStackEntry ->
             val mealId = backStackEntry.arguments?.getString("mealId")
             if (mealId != null) {
                 MealDetailMain(mealId)

@@ -1,6 +1,9 @@
 package com.example.lab7moviles.ui.mealDetail.view
 
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -31,9 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.lab7moviles.networking.response.MealDetailList
 import com.example.lab7moviles.ui.mealDetail.viewModel.MealDetailsViewModel
+
 
 @Composable
 fun MealDetailMain(mealId:String?) {
@@ -88,7 +95,9 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
             Image(
                 painter = painter,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
         }
@@ -99,11 +108,13 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
             text = " ${detail.name}",
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
-            color = Color.Black,
+            color = Color.White,
             lineHeight = 30.sp,
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.tertiary)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -112,11 +123,13 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
             text = "Category: ${detail.category}",
             fontWeight = FontWeight.ExtraBold,
             fontSize = 24.sp,
-            color = androidx.compose.ui.graphics.Color.Black,
+            color = androidx.compose.ui.graphics.Color.White,
             fontFamily = FontFamily.Monospace,
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.tertiary)
         )
 
 
@@ -126,11 +139,13 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
             text = "Area: ${detail.area}",
             fontWeight = FontWeight.ExtraBold,
             fontSize = 20.sp,
-            color = androidx.compose.ui.graphics.Color.Black,
+            color = androidx.compose.ui.graphics.Color.White,
             fontFamily = FontFamily.Monospace,
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.tertiary)
         )
 
 
@@ -181,29 +196,38 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Instrucciones:",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
+        Box(
             modifier = Modifier
-                .padding(bottom = 10.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-
-        val instructionsLines = detail.instructions.split("\n")
-
-
-        instructionsLines.forEachIndexed { index, instruction ->
-            Text(
-                text = if (index == 0) instruction else " $instruction",
-                fontSize = 16.sp,
-                textAlign = TextAlign.Justify,
-
-
-
+                .fillMaxWidth()
+                .background(
+                    color = Color(0xFFEFEFEF),
+                    shape = RoundedCornerShape(16.dp),
                 )
+                .padding(16.dp)
+        ) {
+            Column {
+                Text(
+                    text = "Instrucciones:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+
+                val instructionsLines = detail.instructions.split("\n")
+
+                instructionsLines.forEachIndexed { index, instruction ->
+                    Text(
+                        text = if (index == 0) instruction else " $instruction",
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Justify,
+                    )
+                }
+            }
         }
+
     }
 }
 

@@ -36,8 +36,14 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.lab7moviles.navigation.NavigationState
 import com.example.lab7moviles.networking.response.Meals
 import com.example.lab7moviles.ui.meals.viewModel.MealFilterViewModel
-
-
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.style.TextAlign
 
 
 @Composable
@@ -45,6 +51,8 @@ fun MealFilterMainApp(category: String?, navController: NavController) {
     val viewModel: MealFilterViewModel = viewModel()
     val filteredMeals: MutableState<List<Meals>> = remember { mutableStateOf(emptyList()) }
     val context = LocalContext.current
+    val titleBackgroundColor = Color(0xFF006064)
+
 
     if (category != null) {
         viewModel.getMealsByCategory(category) { response ->
@@ -61,13 +69,17 @@ fun MealFilterMainApp(category: String?, navController: NavController) {
                 text = "Available Meals",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = Color.Black,
-                modifier = Modifier.padding(16.dp)
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .background(titleBackgroundColor)
             )
 
             LazyColumn {
                 items(filteredMeals.value) { meal ->
-                    MealItem(meal= meal, context=context)
+                    MealItem(meal= meal, context= context, navController = navController)
                 }
             }
         }
@@ -76,15 +88,23 @@ fun MealFilterMainApp(category: String?, navController: NavController) {
 }
 
 @Composable
-fun MealItem(meal: Meals, context: Context) {
+fun MealItem(meal: Meals, context: Context,navController: NavController) {
+
+    val mealId = meal.idMeal
+    val titleBackgroundColor = Color(0xFF0097A7)
+
+    val brush = Brush.horizontalGradient(
+        colors = listOf(titleBackgroundColor, titleBackgroundColor),
+    )
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                val intent = Intent(context, NavigationState.MealDetailsMain::class.java)
-                intent.putExtra("mealId", meal.idMeal)
-                context.startActivity(intent)
+                navController.navigate("${NavigationState.MealDetailsMain.route.replace("{mealId}", mealId)}")
+
+
             }
     ) {
         Column(
@@ -97,19 +117,23 @@ fun MealItem(meal: Meals, context: Context) {
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
                     .height(200.dp),
-                contentScale = ContentScale.Crop
+
+                        contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = meal.stringMeal,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.Black,
+                color = Color.White,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 14.dp)
+                    .fillMaxWidth()
+                    .background(titleBackgroundColor)
             )
             Spacer(modifier = Modifier.height(4.dp))
         }

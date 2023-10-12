@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +45,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.lab7moviles.navigation.NavigationState
 import com.example.lab7moviles.networking.response.MealResponse
 import com.example.lab7moviles.ui.categories.viewModel.MealCategoriesViewModel
 
@@ -50,8 +55,14 @@ import com.example.lab7moviles.ui.categories.viewModel.MealCategoriesViewModel
 fun MealCategoriesMainApp(navController: NavController) {
     val viewModel: MealCategoriesViewModel = viewModel()
     val categorizedMeals: MutableState<List<MealResponse>> =
-        remember { mutableStateOf(emptyList()) }
+        remember { mutableStateOf(emptyList<MealResponse>()) }
     val context = LocalContext.current
+    val titleBackgroundColor = Color(0xFF006064)
+
+    val brush = Brush.horizontalGradient(
+        colors = listOf(titleBackgroundColor, titleBackgroundColor),
+        )
+
 
     viewModel.getMealCategories { response ->
         val mealsFromTheApi = response?.categories
@@ -68,24 +79,30 @@ fun MealCategoriesMainApp(navController: NavController) {
             text = "Meal Categories",
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
-            color = Color.DarkGray,
-            modifier = Modifier.padding(16.dp)
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .background(titleBackgroundColor )
         )
 
         LazyColumn {
             items(categorizedMeals.value) { meal ->
-                CategoryItem(meal = meal, context= context)
+                CategoryItem(meal = meal,  context, navController =  navController)
             }
         }
     }
 }
 
 @Composable
-fun CategoryItem(meal: MealResponse, context: Context) {
+fun CategoryItem(meal: MealResponse, context: Context, navController: NavController) {
     val arrowDownIcon = Icons.Default.KeyboardArrowDown
     val arrowUpIcon = Icons.Default.KeyboardArrowUp
+    val titleBackgroundColor = Color(0xFF0097A7)
 
     var isDescriptionVisible by remember { mutableStateOf(false) }
+    val category = meal.name
 
     Box(
         modifier = Modifier
@@ -93,6 +110,8 @@ fun CategoryItem(meal: MealResponse, context: Context) {
             .padding(8.dp)
             .clickable {
                 isDescriptionVisible = !isDescriptionVisible
+
+
             }
     ) {
         Column(
@@ -104,8 +123,15 @@ fun CategoryItem(meal: MealResponse, context: Context) {
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(200.dp)
+                    .clickable{
+                        navController.navigate("${NavigationState.MealFilterMain.route.replace("{categoryId}", category)}")
+
+
+
+                    },
                 contentScale = ContentScale.Crop
             )
 
@@ -119,10 +145,14 @@ fun CategoryItem(meal: MealResponse, context: Context) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.tertiary)
+                    .background(titleBackgroundColor)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Divider(
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp))
 
             if (isDescriptionVisible) {
                 Text(
