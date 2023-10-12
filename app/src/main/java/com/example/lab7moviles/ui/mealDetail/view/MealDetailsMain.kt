@@ -103,50 +103,59 @@ fun MealDetailItem(detail: MealDetailList, Brush: Brush) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = " ${detail.name}",
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            color = Color.White,
-            lineHeight = 30.sp,
+        Box(
             modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.tertiary)
-        )
+            .fillMaxWidth()
+            .background(
+                color = Color(0xFF006064),
+                shape = RoundedCornerShape(16.dp),
+            )
+            .padding(16.dp)){
+            Column{
 
-        Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = " ${detail.name}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    lineHeight = 30.sp,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
 
-        Text(
-            text = "Category: ${detail.category}",
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 24.sp,
-            color = androidx.compose.ui.graphics.Color.White,
-            fontFamily = FontFamily.Monospace,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.tertiary)
-        )
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Category: ${detail.category}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = androidx.compose.ui.graphics.Color.White,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+
+                )
 
 
-        Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "Area: ${detail.area}",
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 20.sp,
-            color = androidx.compose.ui.graphics.Color.White,
-            fontFamily = FontFamily.Monospace,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.tertiary)
-        )
+                Text(
+                    text = "Area: ${detail.area}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = androidx.compose.ui.graphics.Color.White,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+
+                )
+            }
+        }
 
 
         Spacer(modifier = Modifier.height(16.dp))
